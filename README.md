@@ -24,6 +24,7 @@ make
 ### Usage
 
 Make sure libdenydevice can be found by the loader by placing it somewhere in LD_LIBRARY_PATH.
+
 Then start an application:
 
 ```sh
