@@ -22,7 +22,7 @@
 #define INI_SECTION_PATTERNS "patterns"
 #define INI_SECTION_ATTRIBUTES "attributes"
 
-#define LIST_ENTRY_FIELDS(t) t* prev; t* next
+#define LIST_ENTRY_FIELDS(t) t* next
 
 typedef struct list_entry
 {
@@ -75,13 +75,20 @@ void log_debug(const char* format, ...)
 
 void add_list_entry(list_entry** list, list_entry* new_entry)
 {
-  if (*list)
-    (*list)->prev = new_entry;
+  new_entry->next = NULL;
 
-  new_entry->next = *list;
-  new_entry->prev = NULL;
+  if (!*list)
+  {
+    *list = new_entry;
+    return;
+  }
 
-  *list = new_entry;
+  list_entry* list_entry = *list;
+
+  while (list_entry->next)
+    list_entry = list_entry->next;
+
+  list_entry->next = new_entry;
 }
 
 static int ini_parse_handler(void* user, const char* section, const char* name, const char* value)
@@ -151,7 +158,7 @@ bool udev_device_allowed(struct udev_device* dev)
   struct udev_list_entry* attributes = udev_device_get_sysattr_list_entry(dev);
   while (attributes != NULL)
   {
-    for (struct device_attribute* attribute = device_attributes; attribute; attribute = attribute->next)
+    for (device_attribute* attribute = device_attributes; attribute; attribute = attribute->next)
       if (strcasecmp(udev_list_entry_get_name(attributes), attribute->name) == 0 && strcmp(udev_device_get_sysattr_value(dev, udev_list_entry_get_name(attributes)), attribute->value) == 0)
         return false;
 
