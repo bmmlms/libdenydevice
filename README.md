@@ -28,10 +28,10 @@ Make sure libdenydevice can be found by the loader by placing it somewhere in LD
 Then start an application:
 
 ```sh
-LD_PRELOAD=libdenydevice.so LDD_DEBUG=1 LDD_CONFIG=/home/user/libdenydevice_config myapplication
+LD_PRELOAD=libdenydevice.so LIBDD_DEBUG=1 LIBDD_CONFIG=/home/user/libdenydevice_config myapplication
 ```
 
-LDD_DEBUG enables some logging to stderr, LDD_CONFIG points to the library configuration file to be used.
+LIBDD_DEBUG enables some logging to stderr, LIBDD_CONFIG points to the library configuration file to be used.
 
 The configuration is stored in an INI file containing two sections (patterns and attributes).
 When an application opens a device file matched by a specified pattern the attributes of the device and its parents are enumerated.
