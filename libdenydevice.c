@@ -157,8 +157,12 @@ bool udev_device_allowed(struct udev_device* dev)
   while (attributes != NULL)
   {
     for (device_attribute* attribute = device_attributes; attribute; attribute = attribute->next)
-      if (strcasecmp(udev_list_entry_get_name(attributes), attribute->name) == 0 && strcmp(udev_device_get_sysattr_value(dev, udev_list_entry_get_name(attributes)), attribute->value) == 0)
+    {
+      const char* value = udev_device_get_sysattr_value(dev, udev_list_entry_get_name(attributes));
+
+      if (value && strcasecmp(udev_list_entry_get_name(attributes), attribute->name) == 0 && strcmp(value, attribute->value) == 0)
         return false;
+    }
 
     attributes = old_udev_list_entry_get_next(attributes);
   }
@@ -204,8 +208,6 @@ bool device_allowed(const char* devicepath)
     return true;
   }
 
-  udev_enumerate_add_match_subsystem(enumerate, "input");
-  udev_enumerate_add_match_subsystem(enumerate, "hidraw");
   udev_enumerate_scan_devices(enumerate);
 
   struct udev_list_entry* devices = udev_enumerate_get_list_entry(enumerate);
