@@ -14,8 +14,6 @@
 
 #include "inih/ini.c"
 
-#define O_RDONLY 0
-
 #define LIBNAME "libdenydevice"
 #define ENV_DEBUG "LIBDD_DEBUG"
 #define ENV_CONFIGFILE "LIBDD_CONFIG"
